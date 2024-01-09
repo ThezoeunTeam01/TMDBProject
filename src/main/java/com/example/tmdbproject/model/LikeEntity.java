@@ -17,7 +17,6 @@ public class LikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int userId;
+    private String userId;
     private int movieId;
-
 }

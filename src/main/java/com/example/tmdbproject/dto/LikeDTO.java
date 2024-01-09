@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LikeDTO {
     private int id;
-    private int userId;
+    private String userId;
     private int movieId;
 
     public LikeDTO(final LikeEntity entity){

@@ -28,7 +28,7 @@ public class MemberController {
    TokenProvider tokenProvider;
 
    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    @PostMapping
+    @PostMapping("register")
     public ResponseEntity<?>createMember(@RequestBody MemberDTO dto) {
 
         try{
@@ -38,6 +38,8 @@ public class MemberController {
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
             MemberEntity memberEntity = MemberDTO.memberEntity(dto);
+
+            log.info("entity입니다"+memberEntity);
 
             memberEntity = memberService.createMember(memberEntity);
 
@@ -116,6 +118,7 @@ public class MemberController {
             final LoginDTO loginDTO = LoginDTO.builder()
                     .username(member.getUsername())
                     .id(member.getId())
+                    .img(member.getImg())
                     .token(token)
                     .build();
             log.info("----loginDTO----"+loginDTO);

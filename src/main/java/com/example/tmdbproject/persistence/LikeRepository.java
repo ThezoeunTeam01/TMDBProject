@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface LikeRepository extends JpaRepository<LikeEntity,Integer> {
-    List<LikeEntity> findByUserId(int userId);
+    List<LikeEntity> findByUserId(String userId);
 
-    Optional<LikeEntity> findByUserIdAndMovieId(int userId, int movieId);
+    Optional<LikeEntity> findByUserIdAndMovieId(String userId, int movieId);
 }

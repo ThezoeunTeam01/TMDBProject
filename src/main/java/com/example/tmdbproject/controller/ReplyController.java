@@ -20,7 +20,7 @@ public class ReplyController {
     @Autowired
     ReplyService replyService;
 
-    @PostMapping
+    @PostMapping("register")
     public ResponseEntity<?> createReply(@RequestBody ReplyDTO replyDTO) {
 
         ReplyEntity replyEntity = ReplyDTO.replyEntity(replyDTO);
@@ -41,9 +41,8 @@ public class ReplyController {
          return ResponseEntity.ok().body(response);
     }
     @GetMapping
-    public ResponseEntity<?> retrieveReply() {
-        int bno = 1;
-        List<ReplyEntity> replyList = replyService.retrieveReply(bno);
+    public ResponseEntity<?> retrieveReply(@RequestParam int movieId) {
+        List<ReplyEntity> replyList = replyService.retrieveReply(movieId);
 
         log.info("-----------replyList----------"+replyList);
 

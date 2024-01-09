@@ -20,24 +20,24 @@ public class ReplyService {
     public List<ReplyEntity> createReply(final ReplyEntity replyEntity) {
         checkValidator.validate(replyEntity);
         replyRepository.save(replyEntity);
-        return retrieveReply(replyEntity.getBno());
+        return retrieveReply(replyEntity.getMovieId());
     }
-    public List<ReplyEntity> retrieveReply(int bno){
-        return replyRepository.findByBnoOrderByReplyDateDesc(bno);
+    public List<ReplyEntity> retrieveReply(int movieId){
+        return replyRepository.findByMovieIdOrderByReplyDateDesc(movieId);
     }
 
     public List<ReplyEntity> updateReply(final ReplyEntity replyEntity) {
 
         ReplyEntity updateRep = ReplyEntity.builder()
                 .rno(replyEntity.getRno())
-                .bno(replyEntity.getBno())
-                .userName(replyEntity.getUserName())
+                .movieId(replyEntity.getMovieId())
+                .username(replyEntity.getUsername())
                 .content(replyEntity.getContent())
                 .replyDate(new Date())
                 .build();
 
         replyRepository.save(updateRep);
-        return retrieveReply(updateRep.getBno());
+        return retrieveReply(updateRep.getMovieId());
     }
     public List<ReplyEntity> deleteReply(int rno) {
         ReplyEntity deleteRep = replyRepository.findByRno(rno);
@@ -45,7 +45,7 @@ public class ReplyService {
 
         replyRepository.delete(deleteRep);
 
-        return retrieveReply(deleteRep.getBno());
+        return retrieveReply(deleteRep.getMovieId());
     }
 
 }

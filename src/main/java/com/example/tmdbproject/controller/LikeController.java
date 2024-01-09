@@ -37,7 +37,7 @@ public class LikeController {
         service.LikeCreate(likeEntity);
 
     }
-    @DeleteMapping("/likeDelete")
+    @PostMapping("/likeDelete")
     public void likeDelete(@RequestBody LikeDTO dto){
         log.info("라이크 딜리트 시작");
         // dto 유효성 검사
@@ -62,6 +62,8 @@ public class LikeController {
 
         List<LikeDTO> dtos = likeEntities.stream().map(LikeDTO::new).collect(Collectors.toList());
         ResponseDTO<LikeDTO> response = ResponseDTO.<LikeDTO>builder().data(dtos).build();
+
+        log.info("--------response-------"+response);
 
         return ResponseEntity.ok().body(response);
     }

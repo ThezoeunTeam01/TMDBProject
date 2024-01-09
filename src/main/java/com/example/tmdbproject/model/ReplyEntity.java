@@ -22,13 +22,15 @@ public class ReplyEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "your_sequence_generator")
     @SequenceGenerator(name = "your_sequence_generator", sequenceName = "your_sequence_name", allocationSize = 1)
     private int rno;
-    private int bno;
+    private int movieId;
     @NotNull
-    private String userName;
+    private String username;
     private String content;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date replyDate;
+
+    private String img;
 
     @PrePersist
     protected void onCreate() {

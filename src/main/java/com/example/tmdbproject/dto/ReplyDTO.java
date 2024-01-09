@@ -11,22 +11,25 @@ import lombok.NoArgsConstructor;
 public class ReplyDTO {
 
     private int rno;
-    private int bno;
-    private String userName;
+    private int movieId;
+    private String username;
     private String content;
+    private String img;
 
     public ReplyDTO(final ReplyEntity entity) {
         this.rno = entity.getRno();
-        this.bno = entity.getBno();
-        this.userName = entity.getUserName();
+        this.movieId = entity.getMovieId();
+        this.username = entity.getUsername();
         this.content = entity.getContent();
+        this.img = entity.getImg();
     }
     public static ReplyEntity replyEntity(ReplyDTO dto) {
         return ReplyEntity.builder()
                 .rno(dto.getRno())
-                .bno(dto.getBno())
-                .userName(dto.getUserName())
+                .movieId(dto.getMovieId())
+                .username(dto.getUsername())
                 .content(dto.getContent())
+                .img(dto.getImg())
                 .build();
     }
 }
