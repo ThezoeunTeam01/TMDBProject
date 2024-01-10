@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface ReplyRepository extends JpaRepository<ReplyEntity,Integer> {
 
-    List<ReplyEntity> findByMovieIdOrderByReplyDateDesc(int movieId);
+    List<ReplyEntity> findByMovieIdOrderByRnoDesc(int movieId);
 
     ReplyEntity findByRno(int rno);
 }

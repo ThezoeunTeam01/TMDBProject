@@ -23,7 +23,7 @@ public class ReplyService {
         return retrieveReply(replyEntity.getMovieId());
     }
     public List<ReplyEntity> retrieveReply(int movieId){
-        return replyRepository.findByMovieIdOrderByReplyDateDesc(movieId);
+        return replyRepository.findByMovieIdOrderByRnoDesc(movieId);
     }
 
     public List<ReplyEntity> updateReply(final ReplyEntity replyEntity) {
@@ -33,6 +33,7 @@ public class ReplyService {
                 .movieId(replyEntity.getMovieId())
                 .username(replyEntity.getUsername())
                 .content(replyEntity.getContent())
+                .img(replyEntity.getImg())
                 .replyDate(new Date())
                 .build();
 

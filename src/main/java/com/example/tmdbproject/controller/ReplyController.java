@@ -53,6 +53,7 @@ public class ReplyController {
 
     @PutMapping
     public ResponseEntity<?> updateReply(@RequestBody ReplyDTO replyDTO) {
+        log.info("-----replyDTO"+replyDTO);
         ReplyEntity replyEntity = ReplyDTO.replyEntity(replyDTO);
 
         List<ReplyEntity> replyList = replyService.updateReply(replyEntity);
