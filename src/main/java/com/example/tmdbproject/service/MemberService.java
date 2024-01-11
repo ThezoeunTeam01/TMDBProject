@@ -30,7 +30,7 @@ public class MemberService {
 
     public MemberEntity retrieveMember(String id) {
 
-        MemberEntity member = memberRepository.findByUsername(id);
+        MemberEntity member = memberRepository.findById(id).get();
 
         checkValidator.validate(member);
 

@@ -53,10 +53,9 @@ public class MemberController {
         }
     }
     @GetMapping
-    public ResponseEntity<?> retrieveMember() {
+    public ResponseEntity<?> retrieveMember(@RequestParam String id) {
         log.info("react와 연결");
         try{
-            String id = "test5";
             MemberEntity memberEntity = memberService.retrieveMember(id);
 
             MemberDTO memberDTO = new MemberDTO(memberEntity);
