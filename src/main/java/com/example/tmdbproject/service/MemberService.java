@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Log4j2
 @Service
@@ -65,9 +66,8 @@ public class MemberService {
         return memberRepository.save(memberEntity);
     }
 
-    public void deleteMember(String username) {
-        System.out.println("---------delete user name -----------"+username);
-        MemberEntity memberEntity = memberRepository.findByUsername(username);
+    public void deleteMember(String id) {
+        MemberEntity memberEntity = memberRepository.findById(id).get();
         System.out.println("----------delete entitiy-------"+memberEntity);
 
         checkValidator.validate(memberEntity);

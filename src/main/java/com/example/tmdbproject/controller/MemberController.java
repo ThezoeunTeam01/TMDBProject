@@ -90,10 +90,10 @@ public class MemberController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteMember(@RequestBody MemberDTO dto) {
+    public ResponseEntity<?> deleteMember(@RequestParam String id) {
         try{
 
-            memberService.deleteMember(dto.getUsername());
+            memberService.deleteMember(id);
 
             return ResponseEntity.ok().body("success delete");
 
