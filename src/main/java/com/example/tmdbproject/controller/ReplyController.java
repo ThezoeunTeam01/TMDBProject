@@ -22,6 +22,7 @@ public class ReplyController {
 
     @PostMapping("register")
     public ResponseEntity<?> createReply(@RequestBody ReplyDTO replyDTO) {
+        log.info("DTO 값 확인"+replyDTO);
 
         ReplyEntity replyEntity = ReplyDTO.replyEntity(replyDTO);
 

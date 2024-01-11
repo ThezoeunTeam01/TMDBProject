@@ -28,7 +28,7 @@ public class LikeController {
 
     @PostMapping("/likeCreate")
     public void likeCreate(@RequestBody LikeDTO dto){
-
+        log.info("라이크 크리에이트 시작");
         validator.validate(dto);
         log.info("받은 dto 값 확인"+dto);
 
@@ -65,6 +65,20 @@ public class LikeController {
 
         log.info("--------response-------"+response);
 
+        return ResponseEntity.ok().body(response);
+    }
+    @PostMapping("/likeReadButton")
+    public ResponseEntity<?> likeReadButton(@RequestBody LikeDTO dto){
+        log.info("라이크 리드 버튼 시작");
+        // dto 유효성 검사
+        validator.validate(dto);
+        log.info("받은 dto 값 확인" + dto);
+        LikeEntity entity = LikeDTO.toEntity(dto);
+        log.info("변환한 엔티티값 확인" + dto);
+        LikeEntity likeEntities = service.LikeOnlyRead(entity);
+        log.info("출력되는 리스트"+likeEntities);
+        LikeDTO response = new LikeDTO(likeEntities);
+        log.info("--------response-------"+response);
         return ResponseEntity.ok().body(response);
     }
 
