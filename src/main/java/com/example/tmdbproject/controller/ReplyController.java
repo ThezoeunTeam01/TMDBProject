@@ -51,7 +51,7 @@ public class ReplyController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping
+    @PutMapping("update")
     public ResponseEntity<?> updateReply(@RequestBody ReplyDTO replyDTO) {
         log.info("-----replyDTO"+replyDTO);
         ReplyEntity replyEntity = ReplyDTO.replyEntity(replyDTO);
@@ -63,6 +63,12 @@ public class ReplyController {
         List<ReplyDTO> response = replyList.stream().map(ReplyDTO::new).collect(Collectors.toList());
 
         return ResponseEntity.ok().body(response);
+    }
+    @PutMapping("updateImg")
+    public void updateImg(@RequestBody ReplyDTO dto) {
+
+        log.info("updateImg ReplyDTO-----------"+dto);
+        replyService.updateImg(dto.getImg(),dto.getUsername());
     }
 
     @DeleteMapping

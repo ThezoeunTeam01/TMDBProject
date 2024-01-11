@@ -3,6 +3,7 @@ package com.example.tmdbproject.service;
 import com.example.tmdbproject.check.CheckValidator;
 import com.example.tmdbproject.model.ReplyEntity;
 import com.example.tmdbproject.persistence.ReplyRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,12 @@ public class ReplyService {
         replyRepository.save(updateRep);
         return retrieveReply(updateRep.getMovieId());
     }
+
+    @Transactional
+    public void updateImg(final String img, final String username) {
+        replyRepository.updateImgByUsername(img, username);
+    }
+
     public List<ReplyEntity> deleteReply(int rno) {
         ReplyEntity deleteRep = replyRepository.findByRno(rno);
         checkValidator.validate(deleteRep);
