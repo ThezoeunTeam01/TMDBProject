@@ -1,6 +1,7 @@
 package com.example.tmdbproject.dto;
 
 import com.example.tmdbproject.model.MemberEntity;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class MemberDTO {
+
+    @Id
+    private String id;
+
     @NotNull
     private String username;
 
@@ -30,6 +35,7 @@ public class MemberDTO {
     private String img; // 일단 넣어둠
 
     public MemberDTO(final MemberEntity memberEntity) {
+        this.id = memberEntity.getId();
         this.username = memberEntity.getUsername();
         this.password = memberEntity.getPassword();
         this.gender = memberEntity.getGender();
@@ -41,6 +47,7 @@ public class MemberDTO {
 
     public static MemberEntity memberEntity(final MemberDTO memberDTO) {
         return MemberEntity.builder()
+                .id(memberDTO.getId())
                 .username(memberDTO.getUsername())
                 .password(memberDTO.getPassword())
                 .gender(memberDTO.getGender())

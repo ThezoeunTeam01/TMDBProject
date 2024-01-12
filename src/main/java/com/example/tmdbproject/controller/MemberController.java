@@ -123,7 +123,7 @@ public class MemberController {
             log.info("----loginDTO----"+loginDTO);
             return ResponseEntity.ok().body(loginDTO);
         }else{
-            return ResponseEntity.ok().body("Login failed");
+            return ResponseEntity.ok().body(dto);
         }
     }
 }

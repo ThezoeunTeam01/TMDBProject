@@ -51,9 +51,10 @@ public class MemberService {
 
     public MemberEntity updateMember(MemberEntity entity) {
         System.out.println("--------entity-------"+entity);
-        MemberEntity memberEntity = memberRepository.findByUsername(entity.getUsername());
+        MemberEntity memberEntity = memberRepository.findById(entity.getId()).get();
         System.out.println(memberEntity);
 
+        memberEntity.setUsername(entity.getUsername());
         memberEntity.setPassword(entity.getPassword());
         memberEntity.setEmail(entity.getEmail());
         memberEntity.setRegidentNumber(entity.getRegidentNumber());
