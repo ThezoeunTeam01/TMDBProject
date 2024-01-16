@@ -1,6 +1,7 @@
 package com.example.tmdbproject.dto;
 
 import com.example.tmdbproject.model.MemberEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
@@ -15,7 +16,9 @@ public class MemberDTO {
     @Id
     private String id;
 
+
     @NotNull
+    @Column(unique = true)
     private String username;
 
     @NotNull
