@@ -1,6 +1,7 @@
 package com.example.tmdbproject.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,10 @@ public class LikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull
     private String userId;
-    private int movieId;
+    @NotNull
+    private String contentType;
+    @NotNull
+    private int contentId;
 }

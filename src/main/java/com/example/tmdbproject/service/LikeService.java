@@ -29,7 +29,7 @@ public class LikeService {
         repository.save(entity);
     }
     public void LikeDelete(LikeEntity entity){
-        LikeEntity list = repository.findByUserIdAndMovieId(entity.getUserId(), entity.getMovieId()).get();
+        LikeEntity list = repository.findByUserIdAndContentTypeAndAndContentId(entity.getUserId(), entity.getContentType(), entity.getContentId()).get();
         repository.delete(list);
     }
     public List<LikeEntity> LikeRead(LikeEntity entity) {
@@ -40,7 +40,7 @@ public class LikeService {
     public LikeEntity LikeOnlyRead(LikeEntity entity) {
         log.info("서비스영역 확인");
         validator.validate(entity);
-        Optional<LikeEntity> likeEntityOptional = repository.findByUserIdAndMovieId(entity.getUserId(), entity.getMovieId());
+        Optional<LikeEntity> likeEntityOptional = repository.findByUserIdAndContentTypeAndAndContentId(entity.getUserId(), entity.getContentType(), entity.getContentId());
 
         if (likeEntityOptional.isPresent()) {
             LikeEntity likeEntity = likeEntityOptional.get();

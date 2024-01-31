@@ -11,5 +11,5 @@ import java.util.List;
 public interface LikeRepository extends JpaRepository<LikeEntity,Integer> {
     List<LikeEntity> findByUserId(String userId);
 
-    Optional<LikeEntity> findByUserIdAndMovieId(String userId, int movieId);
+    Optional<LikeEntity> findByUserIdAndContentTypeAndAndContentId(String userId, String contentType, int contentId);
 }

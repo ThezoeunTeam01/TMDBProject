@@ -51,6 +51,7 @@ public class LikeController {
 
     @PostMapping("/likeRead")
     public ResponseEntity<?> likeRead(@RequestBody LikeDTO dto){
+
         log.info("라이크 리드 시작");
         // dto 유효성 검사
         validator.validate(dto);
