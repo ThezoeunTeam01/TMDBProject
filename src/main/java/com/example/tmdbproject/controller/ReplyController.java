@@ -1,5 +1,6 @@
 package com.example.tmdbproject.controller;
 
+import com.example.tmdbproject.check.CheckValidator;
 import com.example.tmdbproject.dto.ReplyDTO;
 import com.example.tmdbproject.dto.ResponseDTO;
 import com.example.tmdbproject.model.ReplyEntity;
@@ -7,6 +8,7 @@ import com.example.tmdbproject.service.ReplyService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,32 +22,32 @@ public class ReplyController {
     @Autowired
     ReplyService replyService;
 
+    @Autowired
+    CheckValidator validator;
+
     @PostMapping("register")
     public ResponseEntity<?> createReply(@RequestBody ReplyDTO replyDTO) {
         log.info("DTO 값 확인"+replyDTO);
 
+        validator.validate(replyDTO);
+
         ReplyEntity replyEntity = ReplyDTO.replyEntity(replyDTO);
 
-        log.info("------넘어온 entity------"+replyEntity);
-
         List<ReplyEntity> replyList = replyService.createReply(replyEntity);
-
-        log.info("----ListEntity-----"+replyList);
 
         List<ReplyDTO> dtos = replyList.stream().map(ReplyDTO::new).collect(Collectors.toList());
 
         ResponseDTO<ReplyDTO> response = ResponseDTO.<ReplyDTO>builder().data(dtos).build();
 
-
-        log.info("------response------"+response);
-
          return ResponseEntity.ok().body(response);
     }
     @GetMapping
-    public ResponseEntity<?> retrieveReply(@RequestParam int movieId) {
-        List<ReplyEntity> replyList = replyService.retrieveReply(movieId);
+    public ResponseEntity<?> retrieveReply(@RequestParam String contentType, @RequestParam int contentId) {
+        log.info("----------get--------------");
+        contentType = "movie";
+        contentId = 1234;
 
-        log.info("-----------replyList----------"+replyList);
+        List<ReplyEntity> replyList = replyService.retrieveReply(contentType, contentId);
 
         List<ReplyDTO> response = replyList.stream().map(ReplyDTO::new).collect(Collectors.toList());
 
@@ -54,12 +56,12 @@ public class ReplyController {
 
     @PutMapping("update")
     public ResponseEntity<?> updateReply(@RequestBody ReplyDTO replyDTO) {
-        log.info("-----replyDTO"+replyDTO);
+
+        validator.validate(replyDTO);
+
         ReplyEntity replyEntity = ReplyDTO.replyEntity(replyDTO);
 
         List<ReplyEntity> replyList = replyService.updateReply(replyEntity);
-
-        log.info("-----putMapping List-------"+replyList);
 
         List<ReplyDTO> response = replyList.stream().map(ReplyDTO::new).collect(Collectors.toList());
 

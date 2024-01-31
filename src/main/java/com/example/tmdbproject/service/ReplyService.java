@@ -13,33 +13,31 @@ import java.util.List;
 @Service
 public class ReplyService {
 
-    @Autowired
-    CheckValidator checkValidator;
 
     @Autowired
     ReplyRepository replyRepository;
     public List<ReplyEntity> createReply(final ReplyEntity replyEntity) {
-        checkValidator.validate(replyEntity);
         replyRepository.save(replyEntity);
-        return retrieveReply(replyEntity.getMovieId());
+        return retrieveReply(replyEntity.getContentType(),replyEntity.getContentId());
     }
-    public List<ReplyEntity> retrieveReply(int movieId){
-        return replyRepository.findByMovieIdOrderByRnoDesc(movieId);
+    public List<ReplyEntity> retrieveReply(String contentType, int contentId){
+        return replyRepository.findByContentTypeAndContentIdOrderByRnoDesc(contentType, contentId);
     }
 
     public List<ReplyEntity> updateReply(final ReplyEntity replyEntity) {
 
         ReplyEntity updateRep = ReplyEntity.builder()
                 .rno(replyEntity.getRno())
-                .movieId(replyEntity.getMovieId())
+                .contentType(replyEntity.getContentType())
+                .contentId(replyEntity.getContentId())
                 .username(replyEntity.getUsername())
-                .content(replyEntity.getContent())
+                .reply(replyEntity.getReply())
                 .img(replyEntity.getImg())
                 .replyDate(new Date())
                 .build();
 
         replyRepository.save(updateRep);
-        return retrieveReply(updateRep.getMovieId());
+        return replyRepository.findByContentTypeAndContentIdOrderByRnoDesc(updateRep.getContentType(), updateRep.getContentId());
     }
 
     @Transactional
@@ -49,11 +47,10 @@ public class ReplyService {
 
     public List<ReplyEntity> deleteReply(int rno) {
         ReplyEntity deleteRep = replyRepository.findByRno(rno);
-        checkValidator.validate(deleteRep);
 
         replyRepository.delete(deleteRep);
 
-        return retrieveReply(deleteRep.getMovieId());
+        return retrieveReply(deleteRep.getContentType(),deleteRep.getContentId());
     }
 
 }

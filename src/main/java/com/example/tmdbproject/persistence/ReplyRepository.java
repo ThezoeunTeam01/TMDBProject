@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ReplyRepository extends JpaRepository<ReplyEntity,Integer> {
 
-    List<ReplyEntity> findByMovieIdOrderByRnoDesc(int movieId);
+    List<ReplyEntity> findByContentTypeAndContentIdOrderByRnoDesc(String contentType,int contentId);
 
     ReplyEntity findByRno(int rno);
 

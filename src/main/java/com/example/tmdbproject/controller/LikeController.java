@@ -82,8 +82,4 @@ public class LikeController {
         return ResponseEntity.ok().body(response);
     }
 
-
-
-
-
 }

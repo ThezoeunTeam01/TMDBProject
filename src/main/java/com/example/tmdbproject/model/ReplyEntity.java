@@ -22,10 +22,15 @@ public class ReplyEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "your_sequence_generator")
     @SequenceGenerator(name = "your_sequence_generator", sequenceName = "your_sequence_name", allocationSize = 1)
     private int rno;
-    private int movieId;
+
+    @NotNull
+    private String contentType;
+
+    @NotNull
+    private int contentId;
     @NotNull
     private String username;
-    private String content;
+    private String reply;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date replyDate;

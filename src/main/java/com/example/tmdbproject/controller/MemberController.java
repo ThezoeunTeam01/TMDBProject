@@ -73,6 +73,8 @@ public class MemberController {
 
         try {
 
+            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+
             MemberEntity memberEntity = MemberDTO.memberEntity(dto);
 
             memberEntity = memberService.updateMember(memberEntity);

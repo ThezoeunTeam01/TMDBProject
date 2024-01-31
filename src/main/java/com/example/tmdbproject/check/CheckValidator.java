@@ -17,7 +17,7 @@ public class CheckValidator {
         validator.validate(validateObj, errors);
 
         if(errors.hasErrors()) {
-            System.out.println("따로 뺴놓기");
+            System.out.println("잘못된 정보가 전달되었습니다.");
             throw new RuntimeException("Invalid arguments");
         }
     }
