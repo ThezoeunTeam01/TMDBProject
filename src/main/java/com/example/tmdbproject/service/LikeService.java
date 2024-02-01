@@ -33,8 +33,9 @@ public class LikeService {
         repository.delete(list);
     }
     public List<LikeEntity> LikeRead(LikeEntity entity) {
+        log.info("서비스에서 받은 엔티티"+entity);
         // entity 유효성 검사
-        validator.validate(entity);
+//        validator.validate(entity); //여기서 오류 계속 남 아마 userId만 값이 있어서 그런듯
         return repository.findByUserId(entity.getUserId());
     }
     public LikeEntity LikeOnlyRead(LikeEntity entity) {

@@ -51,13 +51,11 @@ public class LikeController {
 
     @PostMapping("/likeRead")
     public ResponseEntity<?> likeRead(@RequestBody LikeDTO dto){
-
         log.info("라이크 리드 시작");
         // dto 유효성 검사
         validator.validate(dto);
         log.info("받은 dto 값 확인" + dto);
         LikeEntity entity = LikeDTO.toEntity(dto);
-
         List<LikeEntity> likeEntities = service.LikeRead(entity);
         log.info("출력되는 리스트"+likeEntities);
 

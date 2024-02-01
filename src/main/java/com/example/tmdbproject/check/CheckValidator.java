@@ -15,7 +15,6 @@ public class CheckValidator {
         Errors errors = new BeanPropertyBindingResult(validateObj, "validateObj");
         System.out.println(validateObj);
         validator.validate(validateObj, errors);
-
         if(errors.hasErrors()) {
             System.out.println("잘못된 정보가 전달되었습니다.");
             throw new RuntimeException("Invalid arguments");
