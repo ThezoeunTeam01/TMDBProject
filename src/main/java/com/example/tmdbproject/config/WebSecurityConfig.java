@@ -28,7 +28,7 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
-                Arrays.asList("http://localhost:3000","http://prod-todo-ui-service345.ap-northeast-2.elasticbeanstalk.com"));
+                Arrays.asList("http://localhost:3001","http://prod-todo-ui-service345.ap-northeast-2.elasticbeanstalk.com"));
         configuration.setAllowedMethods(
                 Arrays.asList("GET","POST","PUT","DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
@@ -39,6 +39,7 @@ public class WebSecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        log.info("Gdgdgd");
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.addFilterAfter(jwtAthenticationFilter, CorsFilter.class);
         http.csrf(csrf -> csrf.disable());

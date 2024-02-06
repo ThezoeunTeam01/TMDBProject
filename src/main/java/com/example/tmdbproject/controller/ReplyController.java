@@ -43,9 +43,11 @@ public class ReplyController {
     }
     @GetMapping
     public ResponseEntity<?> retrieveReply(@RequestParam String contentType, @RequestParam int contentId) {
-        log.info("----------get--------------");
-        contentType = "movie";
-        contentId = 1234;
+        log.info("----------reply--------------");
+
+        log.info(contentType+"/"+contentId);
+        log.info(contentType);
+        log.info(contentId);
 
         List<ReplyEntity> replyList = replyService.retrieveReply(contentType, contentId);
 

@@ -6,12 +6,17 @@ import com.example.tmdbproject.dto.MemberDTO;
 import com.example.tmdbproject.model.MemberEntity;
 import com.example.tmdbproject.security.TokenProvider;
 import com.example.tmdbproject.service.MemberService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @Log4j2
 @RestController
@@ -126,6 +131,34 @@ public class MemberController {
             return ResponseEntity.ok().body(loginDTO);
         }else{
             return ResponseEntity.ok().body(dto);
+        }
+    }
+    @GetMapping("socialLogin")
+    public ResponseEntity<?> socialLogin(@RequestParam String code) {
+        try{
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            String accessToken = tokenProvider.kakaoToken(code);
+
+            String url = "https://kapi.kakao.com/v2/user/me";
+
+            // 헤더 설정
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + accessToken); // 카카오 액세스 토큰
+
+            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+            // GET 요청 보내기
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+            // 응답 받기
+            log.info("Response: " + responseEntity.getBody());
+
+            return ResponseEntity.ok().body("ss");
+        }catch (Exception e) {
+            log.error("Error: ", e);
+            return ResponseEntity.ok().body("dd");
         }
     }
 }

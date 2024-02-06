@@ -25,6 +25,7 @@ public class LikeDTO {
 
     public static LikeEntity toEntity(final LikeDTO dto){
         return LikeEntity.builder()
+                .id(dto.getId())
                 .userId(dto.getUserId())
                 .contentType(dto.getContentType())
                 .contentId(dto.getContentId())
