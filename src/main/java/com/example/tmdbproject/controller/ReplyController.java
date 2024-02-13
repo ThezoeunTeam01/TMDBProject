@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -99,29 +100,40 @@ public class ReplyController {
         ReplyLikeEntity entity = replyLikeDTO.replyLikeEntity(replyLikeDTO);
         replyService.createReplyLike(entity);
 
-        return ResponseEntity.ok().body("success:sss");
+        return ResponseEntity.ok().body("success");
     }
-    @PostMapping("likeDelete")
+    @DeleteMapping("likeDelete")
     public ResponseEntity<?> likeDelete(@RequestBody ReplyLikeDTO replyLikeDTO) {
+        log.info("likeDelete");
         validator.validate(replyLikeDTO);
         ReplyLikeEntity entity = replyLikeDTO.replyLikeEntity(replyLikeDTO);
         replyService.deleteReplyLike(entity);
 
         return ResponseEntity.ok().body("ok");
     }
-    @PostMapping("likeList")
-    public ResponseEntity<?> likeList(@RequestBody ReplyLikeDTO replyLikeDTO) {
-        validator.validate(replyLikeDTO);
-        ReplyLikeEntity entity = replyLikeDTO.replyLikeEntity(replyLikeDTO);
-        long isLike = replyService.replyLikeList(entity);
+    @GetMapping("likeList")
+    public ResponseEntity<?> likeList(@RequestParam String contentType, @RequestParam int contentId, @RequestParam int rno, @RequestParam String username) {
 
-        Map<String,String> response = new HashMap<>();
-        if(isLike == 1){
-            response.put("status","exist");
+        Optional<ReplyLikeEntity> isLike = replyService.replyLikeList(contentType, contentId, rno, username);
+        Map<String,Integer> response = new HashMap<>();
+        if(isLike.isEmpty()){
+            response.put("status",0);
+
         }else{
-            response.put("status","empty");
+            response.put("status",isLike.get().getId());
+
         }
         return ResponseEntity.ok().body(response);
+    }
+    @GetMapping("likeCount")
+    public ResponseEntity<?> likeCount(@RequestParam String contentType, @RequestParam int contentId, @RequestParam int rno) {
+
+        long likeCount = replyService.replyLikeCount(contentType, contentId, rno);
+
+        Map<String, Long> count = new HashMap<>();
+        count.put("count",likeCount);
+
+        return ResponseEntity.ok().body(count);
     }
 
 }

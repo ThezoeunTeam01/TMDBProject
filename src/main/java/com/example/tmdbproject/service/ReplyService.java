@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReplyService {
@@ -58,16 +59,26 @@ public class ReplyService {
     @Autowired
     ReplyLikeRepository replyLikeRepository;
     public void createReplyLike(ReplyLikeEntity entity) {
+
         replyLikeRepository.save(entity);
     }
 
     public void deleteReplyLike(ReplyLikeEntity entity) {
-        replyLikeRepository.delete(entity);
+        Optional<ReplyLikeEntity> deleteEntity =  replyLikeRepository.findIdByContentTypeAndContentIdAndRnoAndUsername(entity.getContentType(), entity.getContentId(), entity.getRno(), entity.getUsername());
+        if(deleteEntity.isPresent()){
+            replyLikeRepository.delete(deleteEntity.get());
+        }
+
     }
-    public long replyLikeList(ReplyLikeEntity entity) {
-        long isLike = replyLikeRepository.countByContentTypeAndContentIdAndRnoAndUsername(entity.getContentType(),
-                entity.getContentId(), entity.getRno(), entity.getUsername());
+
+    public Optional<ReplyLikeEntity> replyLikeList(String contentType, int contentid, int rno, String username) {
+        Optional<ReplyLikeEntity> isLike = replyLikeRepository.findIdByContentTypeAndContentIdAndRnoAndUsername(contentType, contentid, rno, username);
         return isLike;
+    }
+
+    public long replyLikeCount(String contentType, int contentId, int rno) {
+        long likeCount = replyLikeRepository.countByContentTypeAndContentIdAndRno(contentType, contentId, rno);
+        return likeCount;
     }
 
 }

@@ -15,11 +15,14 @@ import org.springframework.stereotype.Repository;
 @Entity
 @Table(name = "reply_Like")
 public class ReplyLikeEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     @NotNull
     private String contentType;
     @NotNull
     private int contentId;
-    @Id
+    @NotNull
     private int rno;
     @NotNull
     private String username;
