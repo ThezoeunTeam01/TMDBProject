@@ -5,6 +5,7 @@ import com.example.tmdbproject.dto.LoginDTO;
 import com.example.tmdbproject.dto.MemberDTO;
 import com.example.tmdbproject.model.MemberEntity;
 import com.example.tmdbproject.security.TokenProvider;
+import com.example.tmdbproject.service.KakaoService;
 import com.example.tmdbproject.service.MemberService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Log4j2
 @RestController
 @RequestMapping("member")
@@ -27,12 +31,15 @@ public class MemberController {
     MemberService memberService;
 
     @Autowired
+    KakaoService kakaoService;
+
+    @Autowired
     CheckValidator checkValidator;
 
-   @Autowired
-   TokenProvider tokenProvider;
+    @Autowired
+    TokenProvider tokenProvider;
 
-   private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @PostMapping("register")
     public ResponseEntity<?>createMember(@RequestBody MemberDTO dto) {
 
@@ -133,32 +140,39 @@ public class MemberController {
             return ResponseEntity.ok().body(dto);
         }
     }
+    @GetMapping("doubleCheck")
+    public ResponseEntity<?> doubleCheck(@RequestParam String username){
+        log.info("doubleCheck");
+        long isDouble = memberService.doubleCheck(username);
+        Map<String,String> response = new HashMap<>();
+        if(isDouble == 1){
+            response.put("status","impossible");
+        }else {
+            response.put("status","possible");
+        }
+        return ResponseEntity.ok().body(response);
+    }
     @GetMapping("socialLogin")
     public ResponseEntity<?> socialLogin(@RequestParam String code) {
         try{
 
             RestTemplate restTemplate = new RestTemplate();
 
-            String accessToken = tokenProvider.kakaoToken(code);
+            String accessToken = kakaoService.kakaoToken(code);
 
-            String url = "https://kapi.kakao.com/v2/user/me";
+            MemberEntity memberEntity =  kakaoService.kakaoUser(accessToken);
 
-            // 헤더 설정
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "Bearer " + accessToken); // 카카오 액세스 토큰
+            log.info(memberEntity);
 
-            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+            if(memberEntity==null) {
+                log.info("null값이야");
+                return ResponseEntity.ok().body("{}");
+            }
 
-            // GET 요청 보내기
-            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-            // 응답 받기
-            log.info("Response: " + responseEntity.getBody());
-
-            return ResponseEntity.ok().body("ss");
+            return ResponseEntity.ok().body(memberEntity);
         }catch (Exception e) {
             log.error("Error: ", e);
-            return ResponseEntity.ok().body("dd");
+            return ResponseEntity.badRequest().body("error");
         }
     }
 }

@@ -29,6 +29,10 @@ public class MemberService {
         return memberRepository.save(entity);
     }
 
+    public long doubleCheck(String username) {
+        return memberRepository.countByUsername(username);
+    }
+
     public MemberEntity retrieveMember(String id) {
 
         MemberEntity member = memberRepository.findById(id).get();

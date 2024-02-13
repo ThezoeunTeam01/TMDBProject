@@ -16,6 +16,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity, String> {
     List<MemberEntity> findByUsernameOrderByUsernameAsc(String username);
     List<MemberEntity> findAllByOrderByUsernameAsc();
 
+    long countByUsername(String username);
+
     MemberEntity findByUsernameAndPassword(String username, String password);
 
     MemberEntity findByUsername(String username);

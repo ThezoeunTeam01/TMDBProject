@@ -39,7 +39,6 @@ public class WebSecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        log.info("Gdgdgd");
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.addFilterAfter(jwtAthenticationFilter, CorsFilter.class);
         http.csrf(csrf -> csrf.disable());

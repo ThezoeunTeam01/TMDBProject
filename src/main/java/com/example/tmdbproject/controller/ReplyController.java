@@ -2,8 +2,10 @@ package com.example.tmdbproject.controller;
 
 import com.example.tmdbproject.check.CheckValidator;
 import com.example.tmdbproject.dto.ReplyDTO;
+import com.example.tmdbproject.dto.ReplyLikeDTO;
 import com.example.tmdbproject.dto.ResponseDTO;
 import com.example.tmdbproject.model.ReplyEntity;
+import com.example.tmdbproject.model.ReplyLikeEntity;
 import com.example.tmdbproject.service.ReplyService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -39,7 +43,7 @@ public class ReplyController {
 
         ResponseDTO<ReplyDTO> response = ResponseDTO.<ReplyDTO>builder().data(dtos).build();
 
-         return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(response);
     }
     @GetMapping
     public ResponseEntity<?> retrieveReply(@RequestParam String contentType, @RequestParam int contentId) {
@@ -85,6 +89,38 @@ public class ReplyController {
 
         List<ReplyDTO> response = replyList.stream().map(ReplyDTO::new).collect(Collectors.toList());
 
+        return ResponseEntity.ok().body(response);
+    }
+    // 댓글 좋아요
+    @PostMapping("likeCreate")
+    public ResponseEntity<?> likeCreate(@RequestBody ReplyLikeDTO replyLikeDTO) {
+
+        validator.validate(replyLikeDTO);
+        ReplyLikeEntity entity = replyLikeDTO.replyLikeEntity(replyLikeDTO);
+        replyService.createReplyLike(entity);
+
+        return ResponseEntity.ok().body("success:sss");
+    }
+    @PostMapping("likeDelete")
+    public ResponseEntity<?> likeDelete(@RequestBody ReplyLikeDTO replyLikeDTO) {
+        validator.validate(replyLikeDTO);
+        ReplyLikeEntity entity = replyLikeDTO.replyLikeEntity(replyLikeDTO);
+        replyService.deleteReplyLike(entity);
+
+        return ResponseEntity.ok().body("ok");
+    }
+    @PostMapping("likeList")
+    public ResponseEntity<?> likeList(@RequestBody ReplyLikeDTO replyLikeDTO) {
+        validator.validate(replyLikeDTO);
+        ReplyLikeEntity entity = replyLikeDTO.replyLikeEntity(replyLikeDTO);
+        long isLike = replyService.replyLikeList(entity);
+
+        Map<String,String> response = new HashMap<>();
+        if(isLike == 1){
+            response.put("status","exist");
+        }else{
+            response.put("status","empty");
+        }
         return ResponseEntity.ok().body(response);
     }
 
