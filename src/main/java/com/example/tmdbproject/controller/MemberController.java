@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Log4j2
 @RestController
@@ -122,6 +123,7 @@ public class MemberController {
     // 로그인
     @PostMapping("/signin")
     public ResponseEntity<?> authenticate(@RequestBody LoginDTO dto) {
+
         MemberEntity member = memberService.getByCredentials(dto.getUsername(),dto.getPassword(), passwordEncoder);
         log.info(member);
 
@@ -155,21 +157,36 @@ public class MemberController {
     @GetMapping("socialLogin")
     public ResponseEntity<?> socialLogin(@RequestParam String code) {
         try{
+            log.info("code"+code);
 
             RestTemplate restTemplate = new RestTemplate();
 
             String accessToken = kakaoService.kakaoToken(code);
-
+            log.info("accessToken"+accessToken);
             MemberEntity memberEntity =  kakaoService.kakaoUser(accessToken);
 
             log.info(memberEntity);
 
-            if(memberEntity==null) {
-                log.info("null값이야");
-                return ResponseEntity.ok().body("{}");
+            if(memberEntity.getId()==null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("status","not-exist");
+                response.put("email",memberEntity.getEmail());
+                response.put("regidentNumber",memberEntity.getRegidentNumber());
+                response.put("gender",memberEntity.getGender());
+               return ResponseEntity.ok().body(response);
+            }else {
+                final String token = tokenProvider.create(memberEntity);
+
+                final LoginDTO loginDTO = LoginDTO.builder()
+                        .username(memberEntity.getUsername())
+                        .id(memberEntity.getId())
+                        .img(memberEntity.getImg())
+                        .token(token)
+                        .build();
+                log.info("----loginDTO----"+loginDTO);
+                return ResponseEntity.ok().body(loginDTO);
             }
 
-            return ResponseEntity.ok().body(memberEntity);
         }catch (Exception e) {
             log.error("Error: ", e);
             return ResponseEntity.badRequest().body("error");

@@ -5,6 +5,7 @@ import com.example.tmdbproject.persistence.MemberRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -12,11 +13,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Member;
+import java.util.Optional;
 
 @Log4j2
 @Service
 public class KakaoService {
 
+    @Autowired
     MemberRepository memberRepository;
 
     RestTemplate restTemplate = new RestTemplate();
@@ -54,6 +57,7 @@ public class KakaoService {
 
             return accessToken;
         } catch (Exception e) {
+            log.error(e);
             return "error";
         }
     }
@@ -61,6 +65,7 @@ public class KakaoService {
     public MemberEntity kakaoUser(String accessToken) {
 
         try {
+            log.info("kakaoUSerService");
             String url = "https://kapi.kakao.com/v2/user/me";
 
             // 헤더 설정
@@ -76,19 +81,56 @@ public class KakaoService {
 
             // 응답 본문을 JsonNode로 변환
             JsonNode jsonNode = mapper.readTree(responseEntity.getBody());
-
+            log.info("반환받은 값 확인");
             log.info(responseEntity.getBody());
 
             // access_token 값 추출
-            JsonNode properties = jsonNode.get("properties");
+            JsonNode kakao_account = jsonNode.get("kakao_account");
+            if (kakao_account != null) {
+                JsonNode emailNode = kakao_account.get("email");
+                JsonNode genderNode = kakao_account.get("gender");
+                JsonNode ageNode = kakao_account.get("age_range");
+                if (emailNode != null && genderNode !=null && ageNode!=null) {
 
-            String username = properties.get("nickname").asText();
+                    String email = emailNode.asText();
 
-            MemberEntity memberEntity = memberRepository.findByUsername(username);
+                    String gender = genderNode.asText();
+                    if(gender.equals("male")){
+                        gender="M";
+                    }else{
+                        gender="W";
+                    }
 
-            return memberEntity;
+                    String age = ageNode.asText();
+                    String ageSubstring = age.substring(0, 2); // 문자열에서 처음 두 문자를 추출
+                    int ageInteger = Integer.parseInt(ageSubstring); // 문자열을 정수형으로 변환
+
+                    log.info("kakaoEmail---------------");
+                    log.info(email);
+                    log.info(gender);
+                    log.info(age);
+
+                    MemberEntity memberEntity = memberRepository.findByEmailAndSns(email,"kakao");
+                    if(memberEntity!=null) {
+                        return memberEntity;
+                    }else {
+                        return MemberEntity.builder()
+                                .email(email)
+                                .gender(gender)
+                                .regidentNumber(ageInteger)
+                                .build();
+                    }
+
+                } else {
+                    log.error("Email not found in kakao_account");
+                }
+            } else {
+                log.error("kakao_account not found in the response");
+            }
+            return null;
 
         }catch (Exception e) {
+            log.error(e);
             return null;
         }
     }

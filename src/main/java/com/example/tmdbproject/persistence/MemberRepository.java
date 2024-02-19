@@ -21,6 +21,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity, String> {
     MemberEntity findByUsernameAndPassword(String username, String password);
 
     MemberEntity findByUsername(String username);
+    MemberEntity findByEmailAndSns(String email,String sns);
+
     Optional<MemberEntity> findById(String id);
 
     @Transactional
