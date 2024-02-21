@@ -45,14 +45,13 @@ public class MemberController {
     public ResponseEntity<?>createMember(@RequestBody MemberDTO dto) {
 
         try{
+            // 유효성 검사
             checkValidator.validate(dto);
-            log.info("----------dto 정보 확인-----------"+dto);
-
+            
+            // 비밀번호 암호화
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
             MemberEntity memberEntity = MemberDTO.memberEntity(dto);
-
-            log.info("entity입니다"+memberEntity);
 
             memberEntity = memberService.createMember(memberEntity);
 
