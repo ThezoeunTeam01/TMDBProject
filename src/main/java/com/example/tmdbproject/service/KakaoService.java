@@ -37,7 +37,8 @@ public class KakaoService {
             // 파라미터 설정
             MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
             parameters.add("grant_type", "authorization_code");
-            parameters.add("client_id", "01074d8866978b72ce430120a459bdf7"); // 카카오 앱의 REST API 키
+            parameters.add("client_id", "346c17bdd5f28dbcc5448079dcc42ea9"); // 카카오 앱의 REST API 키
+            parameters.add("client_secret","YKJm1pb3pmj5LQJPd18mStqYgfP9vVkI");
             parameters.add("redirect_uri", "http://localhost:3001"); // 카카오 로그인 후 리다이렉트될 URI
             parameters.add("code", code); // React에서 받은 인가코드
 
@@ -88,36 +89,21 @@ public class KakaoService {
             JsonNode kakao_account = jsonNode.get("kakao_account");
             if (kakao_account != null) {
                 JsonNode emailNode = kakao_account.get("email");
-                JsonNode genderNode = kakao_account.get("gender");
-                JsonNode ageNode = kakao_account.get("age_range");
-                if (emailNode != null && genderNode !=null && ageNode!=null) {
+
+                if (emailNode != null) {
 
                     String email = emailNode.asText();
 
-                    String gender = genderNode.asText();
-                    if(gender.equals("male")){
-                        gender="M";
-                    }else{
-                        gender="W";
-                    }
-
-                    String age = ageNode.asText();
-                    String ageSubstring = age.substring(0, 2); // 문자열에서 처음 두 문자를 추출
-                    int ageInteger = Integer.parseInt(ageSubstring); // 문자열을 정수형으로 변환
 
                     log.info("kakaoEmail---------------");
                     log.info(email);
-                    log.info(gender);
-                    log.info(age);
 
-                    MemberEntity memberEntity = memberRepository.findByEmailAndSns(email,"kakao");
+                    MemberEntity memberEntity = memberRepository.findByEmail(email);
                     if(memberEntity!=null) {
                         return memberEntity;
                     }else {
                         return MemberEntity.builder()
                                 .email(email)
-                                .gender(gender)
-                                .regidentNumber(ageInteger)
                                 .build();
                     }
 

@@ -171,8 +171,6 @@ public class MemberController {
                 Map<String, Object> response = new HashMap<>();
                 response.put("status","not-exist");
                 response.put("email",memberEntity.getEmail());
-                response.put("regidentNumber",memberEntity.getRegidentNumber());
-                response.put("gender",memberEntity.getGender());
                return ResponseEntity.ok().body(response);
             }else {
                 final String token = tokenProvider.create(memberEntity);
