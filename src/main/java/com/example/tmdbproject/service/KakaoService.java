@@ -37,15 +37,15 @@ public class KakaoService {
             // 파라미터 설정
             MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
             parameters.add("grant_type", "authorization_code");
-            parameters.add("client_id", "346c17bdd5f28dbcc5448079dcc42ea9"); // 카카오 앱의 REST API 키
+            parameters.add("client_id", "346c17bdd5f28dbcc5448079dcc42ea9");
             parameters.add("client_secret","YKJm1pb3pmj5LQJPd18mStqYgfP9vVkI");
-            parameters.add("redirect_uri", "http://localhost:3001"); // 카카오 로그인 후 리다이렉트될 URI
-            parameters.add("code", code); // React에서 받은 인가코드
+            parameters.add("redirect_uri", "http://localhost:3001");
+            parameters.add("code", code);
 
             // HttpEntity 생성
             HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, headers);
 
-            // POST 요청 보내기
+            // POST 요청
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
             ObjectMapper mapper = new ObjectMapper();

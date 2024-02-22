@@ -28,7 +28,7 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
-                Arrays.asList("http://localhost:3001","http://prod-todo-ui-service345.ap-northeast-2.elasticbeanstalk.com"));
+                Arrays.asList("http://localhost:3001","https://app.laftelixx.p-e.kr/"));
         configuration.setAllowedMethods(
                 Arrays.asList("GET","POST","PUT","DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
@@ -46,7 +46,7 @@ public class WebSecurityConfig {
         http.sessionManagement(sessionManagement ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(httpAuth -> {
-            httpAuth.requestMatchers("/", "/member/**","/reply/**","/like/**").permitAll();
+            httpAuth.requestMatchers("/", "/member/**","/reply/**","/like/**","/star_rating/**").permitAll();
             httpAuth.anyRequest().authenticated();
                 });
 
